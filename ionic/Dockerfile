@@ -1,6 +1,6 @@
 # Multi-stage Dockerfile for Ionic AI Voice Notes App
 # Stage 1: Web Asset Compilation with Bun.js
-FROM oven/bun:latest-slim AS web-builder
+FROM oven/bun:1.2.19-alpine AS web-builder
 
 WORKDIR /app
 
@@ -13,8 +13,9 @@ RUN bun install --frozen-lockfile
 # Copy source code
 COPY . .
 
-# Build Ionic web application
-RUN bunx ionic build --prod
+# Build web application using Vite with proper configuration
+RUN chmod +x node_modules/.bin/* && \
+    NODE_ENV=production bunx vite build --mode production
 
 # Stage 2: Android Application Build
 FROM bitriseio/android-ndk-lts:latest AS android-builder

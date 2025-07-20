@@ -14,16 +14,16 @@ export const useOnDeviceAI = () => {
     try {
       // Dynamic import to reduce initial bundle size
       const ort = await import('onnxruntime-web');
-      
+
       // Configure ONNX Runtime for mobile optimization
       ort.env.wasm.wasmPaths = '/assets/onnx/';
       ort.env.wasm.numThreads = 1; // Single thread for resource-constrained devices
       ort.env.wasm.simd = false; // Disable SIMD for compatibility
-      
+
       // Load the quantized model
       // In production, replace with actual model path
       // const modelSession = await ort.InferenceSession.create('/assets/models/tinyllama-q4.onnx');
-      
+
       console.log('On-device AI model loaded successfully');
       // setSession(modelSession);
       setModelLoaded(true);
@@ -39,12 +39,12 @@ export const useOnDeviceAI = () => {
         await session.release();
         setSession(null);
         setModelLoaded(false);
-        
+
         // Force garbage collection to free memory
         if ('gc' in window && typeof window.gc === 'function') {
           window.gc();
         }
-        
+
         console.log('On-device AI model unloaded');
       } catch (error) {
         console.error('Error unloading model:', error);
@@ -58,7 +58,7 @@ export const useOnDeviceAI = () => {
 
     while (start < text.length) {
       let end = start + maxLength;
-      
+
       // Try to break at word boundaries
       if (end < text.length) {
         const lastSpace = text.lastIndexOf(' ', end);
@@ -81,34 +81,34 @@ export const useOnDeviceAI = () => {
     // 2. Create input tensors
     // 3. Run inference through the ONNX model
     // 4. Decode the output tokens back to text
-    
+
     // Mock processing delay to simulate real inference
     await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 2000));
-    
+
     // Return mock responses based on action type
     switch (action) {
       case 'summarize':
         return `Summary: Key points from the provided text include the main topics discussed. The content covers ${chunk.split(' ').length} words of meeting notes with important decisions and outcomes highlighted.`;
-      
+
       case 'extract_actions':
         const sentences = chunk.split('.').filter(s => s.trim().length > 0);
         const actionItems = sentences
           .filter(s => s.toLowerCase().includes('will') || s.toLowerCase().includes('should') || s.toLowerCase().includes('need'))
           .slice(0, 3)
           .map((item, index) => `${index + 1}. ${item.trim()}.`);
-        
-        return actionItems.length > 0 
+
+        return actionItems.length > 0
           ? `Action Items:\n${actionItems.join('\n')}`
           : 'No clear action items identified in this text segment.';
-      
+
       case 'analyze':
         const wordCount = chunk.split(' ').length;
-        const sentiment = chunk.toLowerCase().includes('problem') || chunk.toLowerCase().includes('issue') 
-          ? 'concerns raised' 
+        const sentiment = chunk.toLowerCase().includes('problem') || chunk.toLowerCase().includes('issue')
+          ? 'concerns raised'
           : 'positive discussion';
-        
+
         return `Analysis: This ${wordCount}-word segment contains ${sentiment}. The text appears to be from a ${chunk.toLowerCase().includes('meeting') ? 'meeting' : 'general'} context with structured information.`;
-      
+
       default:
         return `Processed ${chunk.length} characters of text content.`;
     }
@@ -134,7 +134,7 @@ export const useOnDeviceAI = () => {
       for (const chunk of chunks) {
         const result = await processChunk(chunk, action);
         results.push(result);
-        
+
         // Check memory usage between chunks
         if (isMemoryConstrained()) {
           console.warn('Memory constraint detected during processing');
@@ -172,12 +172,12 @@ export const useOnDeviceAI = () => {
   const isMemoryConstrained = useCallback((): boolean => {
     const memoryUsage = getMemoryUsage();
     const memoryLimit = 150; // Alert if using more than 150MB (conservative for 3GB device)
-    
+
     if (memoryUsage > memoryLimit) {
       console.warn(`Memory usage: ${memoryUsage.toFixed(2)}MB (limit: ${memoryLimit}MB)`);
       return true;
     }
-    
+
     return false;
   }, [getMemoryUsage]);
 

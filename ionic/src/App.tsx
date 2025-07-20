@@ -37,9 +37,7 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
-        <Route exact path="/tabs">
-          <Tabs />
-        </Route>
+        <Route path="/tabs" component={Tabs} />
         <Route exact path="/">
           <Redirect to="/tabs/notes" />
         </Route>

@@ -21,15 +21,9 @@ import SettingsPage from '../pages/SettingsPage';
 const Tabs: React.FC = () => (
   <IonTabs>
     <IonRouterOutlet>
-      <Route exact path="/tabs/notes">
-        <NotesPage />
-      </Route>
-      <Route exact path="/tabs/record">
-        <RecordPage />
-      </Route>
-      <Route exact path="/tabs/settings">
-        <SettingsPage />
-      </Route>
+      <Route exact path="/tabs/notes" component={NotesPage} />
+      <Route exact path="/tabs/record" component={RecordPage} />
+      <Route exact path="/tabs/settings" component={SettingsPage} />
       <Route exact path="/tabs">
         <Redirect to="/tabs/notes" />
       </Route>

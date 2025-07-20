@@ -33,7 +33,7 @@ import {
   checkmark,
   close,
   cloud,
-  phone,
+  phonePortrait,
   speedometer
 } from 'ionicons/icons';
 import { useForm, Controller } from 'react-hook-form';
@@ -176,7 +176,7 @@ const SettingsPage: React.FC = () => {
                           Remote/Self-Hosted
                         </IonSelectOption>
                         <IonSelectOption value={AIMode.ON_DEVICE}>
-                          <IonIcon icon={phone} style={{ marginRight: '8px' }} />
+                          <IonIcon icon={phonePortrait} style={{ marginRight: '8px' }} />
                           On-Device
                         </IonSelectOption>
                       </IonSelect>

@@ -20,13 +20,21 @@ export default defineConfig({
     outDir: 'www',
     assetsDir: 'assets',
     rollupOptions: {
+      external: [],
       output: {
         manualChunks: {
           'onnx-runtime': ['onnxruntime-web'],
-          'ionic-react': ['@ionic/react', '@ionic/react-router'],
-          'react-vendor': ['react', 'react-dom', 'react-router-dom']
+          'react-vendor': ['react', 'react-dom', 'react-router-dom', 'react-hook-form', 'zustand']
         }
       }
+    }
+  },
+  optimizeDeps: {
+    include: ['@ionic/react', '@ionic/react-router', '@ionic/core', 'ionicons']
+  },
+  resolve: {
+    alias: {
+      '@': '/src'
     }
   }
 });

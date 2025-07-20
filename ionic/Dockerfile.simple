@@ -1,0 +1,34 @@
+# Simplified Dockerfile for AI Voice Notes App
+# This version focuses on getting a working build without complex Ionic dependencies
+
+FROM node:18-alpine AS web-builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json ./
+
+# Install dependencies using npm (more stable for Ionic builds)
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Create a basic www directory with our app files
+RUN mkdir -p www && \
+    cp -r src/* www/ && \
+    cp index.html www/ && \
+    echo "Basic build completed"
+
+# Stage 2: Android Build (simplified for now)
+FROM alpine:latest AS final
+
+# Copy web assets
+COPY --from=web-builder /app/www /output/www/
+
+# Create extraction script
+RUN echo '#!/bin/sh' > /extract.sh && \
+    echo 'cp -r /output/* /host/' >> /extract.sh && \
+    chmod +x /extract.sh
+
+CMD ["/extract.sh"]
