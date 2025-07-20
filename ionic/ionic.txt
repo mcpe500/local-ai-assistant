@@ -1,0 +1,74 @@
+AI Voice Notes - Comprehensive Project Requirements
+
+This is a comprehensive prompt for building a multiplatform, voice-enabled, AI-powered note-taking application using Ionic, with a core focus on a Dockerized build environment and flexible, local-first AI model integration.
+
+You are an expert software architect specializing in resource-efficient, cross-platform mobile development and containerized CI/CD pipelines. Your task is to generate a complete project plan and foundational code for a sophisticated, voice-enabled AI note-taking application.
+
+This application must be built using the Ionic Framework with Capacitor and Bun.js. A non-negotiable, primary requirement is that the entire build process for both the web assets and the Android application (APK/AAB) MUST be encapsulated within a single, multi-stage Dockerfile. The developer will rely exclusively on a Docker/Podman environment to produce all build artifacts, as they do not have native SDKs installed locally.
+
+The application's purpose is to help users capture and understand tasks from meetings. It will transcribe voice to text and use AI models to summarize or analyze the notes. The AI integration must be highly flexible, supporting both a self-hosted endpoint (like a personal Ollama server) and a deeply optimized, on-device model for true offline, local-first processing. The on-device mode must be engineered for extreme resource constraints, targeting a 2017-era Android device with 3GB of RAM.
+
+I. Core Requirement: Fully Dockerized Build Environment
+You must design and generate a comprehensive, multi-stage Dockerfile that automates the entire build process from source to final package.
+
+Stage 1: Web Asset Compilation (Bun.js)
+Base Image: Start from an official oven/bun:latest-slim Docker image.
+Dependencies: Copy package.json and bun.lockb, then execute bun install --frozen-lockfile to ensure reproducible builds.
+Ionic Build: Copy the full application source code and run bunx ionic build to compile the web application into the /app/www directory. This stage's sole output is the optimized static www folder.
+
+Stage 2: Android Application Build (APK/AAB)
+Base Image: Use a modern Android build environment image that includes the Android SDK, JDK, and Gradle, such as bitriseio/android-ndk-lts.
+Project Setup:
+Install necessary global CLIs like Ionic and Capacitor (npm install -g @ionic/cli native-run).
+Copy the source code and the www directory from the first stage.
+Capacitor Sync: Run npx ionic capacitor sync android to integrate the web assets and configure the native Android project.
+Native Build: cd into the android directory, make gradlew executable, and run ./gradlew assembleRelease (or bundleRelease) to produce the final Android package.
+iOS Limitation: Explicitly comment in the Dockerfile and README.md that iOS builds require a macOS host and are not supported by this Docker environment.
+
+II. Core Application Functionality
+1. Voice-to-Text Transcription:
+Native Integration: Use the Capacitor Voice Recorder API or a similar robust plugin to capture audio. The app must handle permissions gracefully.
+Transcription Engine:
+Remote/Self-Hosted: Allow the user to configure an API endpoint and key for a transcription service.
+Local/On-Device: Integrate a highly efficient, small-footprint, Wasm-based speech-to-text model (e.g., a quantized version of Whisper from the Hugging Face library) for offline transcription. This is critical for privacy and offline use.
+
+2. Flexible AI Model Integration:
+The app must support two distinct modes for AI processing, which the user can switch between in the app's settings.
+Mode A: Self-Hosted Endpoint (Ollama, Genta, etc.)
+Configuration: The user must be able to securely input and save an API endpoint URL and an optional API key. This will be used to communicate with their self-hosted LLM instance (e.g., Ollama running on a home server or a cloud VM).
+API Service: Create a dedicated, reusable TypeScript service to handle all HTTP requests to the configured endpoint. It should manage headers, data payload, and error handling.
+Mode B: On-Device Local Model (Hyper-Optimized)
+Deep Optimization: This is the most challenging requirement. The goal is to run a model directly on a low-spec phone.
+Wasm-based Inference: Integrate a lightweight, quantized text-generation model (e.g., a distilled version of a model like TinyLlama or MobileBERT) via a WebAssembly runtime like ONNX Runtime Web. The model files must be bundled as application assets.
+Resource Management: Implement aggressive resource management. This includes:
+Loading the model into memory only when needed and unloading it immediately after use.
+Processing text in small, manageable chunks to avoid overwhelming the CPU and RAM.
+Providing clear UI feedback (e.g., loading spinners, progress bars) to the user during processing, as it will not be instantaneous.
+
+3. Note-Taking & Analysis:
+UI: A clean, intuitive interface using Ionic components.
+Local Storage: Use the Capacitor Filesystem API to save all notes and transcriptions locally on the device, ensuring the app is fully functional offline.
+Functionality: Once a note is created (either by typing or voice transcription), the user can select an AI action, such as "Summarize Meeting" or "Extract Action Items," which will use the currently configured AI model (either self-hosted or on-device).
+
+III. Technical Architecture & Implementation
+Frameworks: Ionic, Capacitor, Bun.js.
+Language: TypeScript.
+State Management: Use a simple, efficient state management solution suitable for Ionic (e.g., Angular Signals, Akita, or a simple service-based approach with RxJS BehaviorSubject).
+Styling: Use SCSS and CSS variables for a themeable, responsive design.
+README.md: Provide comprehensive documentation, focusing on:
+How to build the project for Android using a single Docker command.
+How to configure the app for both self-hosted and on-device AI models.
+The trade-offs between the two AI modes (performance vs. capability).
+
+IV. Deliverables
+Your final output must be a complete, self-contained, and buildable project structure, including:
+The multi-stage Dockerfile.
+A detailed README.md with Docker-based build and configuration instructions.
+The full Ionic application source code, featuring:
+UI for settings, note-taking, and voice recording.
+A secure service for managing API credentials for self-hosted models.
+Capacitor integration for Filesystem and Voice Recording.
+A well-defined, placeholder Wasm integration module, clearly showing where the on-device model would be loaded, run, and unloaded.
+All required configuration files (capacitor.config.ts, ionic.config.json, package.json, etc.).
+
+Remember to use React with state management that is supported by Ionic and also form handling that is supported by Ionic.

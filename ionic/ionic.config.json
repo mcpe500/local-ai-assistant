@@ -1,0 +1,8 @@
+{
+  "name": "ai-voice-notes",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react",
+  "id": "ai-voice-notes"
+}

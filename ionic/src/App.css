@@ -1,0 +1,252 @@
+/* Global App Styles */
+
+.app-container {
+  height: 100vh;
+}
+
+/* Note Card Styles */
+.note-card {
+  margin: 8px 16px;
+  border-radius: 12px;
+}
+
+.note-card .note-title {
+  font-weight: 600;
+  font-size: 1.1em;
+  margin-bottom: 4px;
+}
+
+.note-card .note-preview {
+  color: var(--ion-color-medium);
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+.note-card .note-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.note-card .note-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+/* Recording Button Styles */
+.record-button {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  margin: 20px auto;
+  transition: all 0.3s ease;
+}
+
+.record-button.recording {
+  animation: pulse 1.5s infinite;
+  background: var(--ion-color-danger);
+}
+
+.record-button:not(.recording):hover {
+  transform: scale(1.05);
+}
+
+/* Settings Form Styles */
+.settings-section {
+  margin-bottom: 24px;
+}
+
+.settings-section h3 {
+  margin: 0 0 16px 0;
+  color: var(--ion-color-primary);
+  font-weight: 600;
+}
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 500;
+  color: var(--ion-text-color);
+}
+
+/* AI Status Indicators */
+.ai-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.9em;
+}
+
+.ai-status.remote {
+  background: rgba(var(--ion-color-primary-rgb), 0.1);
+  color: var(--ion-color-primary);
+}
+
+.ai-status.on-device {
+  background: rgba(var(--ion-color-success-rgb), 0.1);
+  color: var(--ion-color-success);
+}
+
+.ai-status.error {
+  background: rgba(var(--ion-color-danger-rgb), 0.1);
+  color: var(--ion-color-danger);
+}
+
+/* Memory Usage Indicator */
+.memory-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.85em;
+}
+
+.memory-indicator.normal {
+  background: rgba(var(--ion-color-success-rgb), 0.1);
+  color: var(--ion-color-success);
+}
+
+.memory-indicator.warning {
+  background: rgba(var(--ion-color-warning-rgb), 0.1);
+  color: var(--ion-color-warning);
+}
+
+.memory-indicator.critical {
+  background: rgba(var(--ion-color-danger-rgb), 0.1);
+  color: var(--ion-color-danger);
+}
+
+/* Transcription Display */
+.transcription-container {
+  background: var(--ion-color-light);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.transcription-container h4 {
+  margin: 0 0 8px 0;
+  color: var(--ion-color-primary);
+}
+
+.transcription-text {
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* AI Analysis Display */
+.ai-analysis {
+  background: rgba(var(--ion-color-secondary-rgb), 0.05);
+  border-left: 4px solid var(--ion-color-secondary);
+  padding: 16px;
+  margin: 16px 0;
+  border-radius: 0 8px 8px 0;
+}
+
+.ai-analysis h4 {
+  margin: 0 0 8px 0;
+  color: var(--ion-color-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ai-analysis-content {
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* Loading States */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.loading-container ion-spinner {
+  margin-bottom: 16px;
+}
+
+.loading-text {
+  color: var(--ion-color-medium);
+  font-size: 0.9em;
+}
+
+/* Empty States */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+  color: var(--ion-color-medium);
+}
+
+.empty-state ion-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  margin: 0 0 8px 0;
+  font-weight: 500;
+}
+
+.empty-state p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .note-card {
+    margin: 4px 8px;
+  }
+  
+  .record-button {
+    width: 100px;
+    height: 100px;
+    font-size: 40px;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .record-button.recording {
+    animation: none;
+  }
+  
+  .recording-pulse {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .note-card {
+    border: 2px solid var(--ion-color-medium);
+  }
+  
+  .ai-analysis {
+    border-left-width: 6px;
+  }
+}
